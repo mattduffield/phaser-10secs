@@ -1,1 +1,27 @@
-Ly8gQmFzZWQgb24gYW4gb3JpZ2luYWwgZWZmZWN0IGJ5IGpvbHR6MHIgYW5kIEFsdGVyZWQKCnByZWNpc2lvbiBtZWRpdW1wIGZsb2F0OwoKdW5pZm9ybSBmbG9hdCAgIHRpbWU7CnVuaWZvcm0gdmVjMiAgICByZXNvbHV0aW9uOwp1bmlmb3JtIHZlYzMgICAgY29sb3I7Cgp2b2lkIG1haW4oKSB7CgogICAgdmVjMiBwID0gZ2xfRnJhZ0Nvb3JkLnh5IC8gcmVzb2x1dGlvbiAqIDEwLjAgLXZlYzIoMTkuMCk7CiAgICB2ZWMyIGkgPSBwOwogICAgZmxvYXQgYyA9IDEuMDsKICAgIGZsb2F0IGludGVuID0gLjA1OwoKICAgIGZvciAoaW50IG4gPSAwOyBuIDwgODsgbisrKSAKICAgIHsKICAgICAgICBmbG9hdCB0ID0gdGltZSAqICgwLjcgLSAoMC4yIC8gZmxvYXQobisxKSkpOwogICAgICAgIGkgPSBwICsgdmVjMihjb3ModCAtIGkueCkgKyBzaW4odCArIGkueSksIHNpbih0IC0gaS55KSArIGNvcyh0ICsgaS54KSk7CiAgICAgICAgYyArPSAxLjAgLyBsZW5ndGgodmVjMihwLnggLyAoMi4wICogc2luKGkueCArIHQpIC8gaW50ZW4pLCBwLnkgLyAoY29zKGkueSArIHQpIC8gaW50ZW4pKSk7CiAgICB9CgogICAgYyAvPSBmbG9hdCg4KTsKICAgIGMgPSAxLjUgLSBzcXJ0KHBvdyhjLCAyLjApKTsKICAgIGdsX0ZyYWdDb2xvciA9IHZlYzQoY29sb3IgKiBjICogYyAqIGMgKiBjLCAxLjApOwoKfQ==
+// Based on an original effect by joltz0r and Altered
+
+precision mediump float;
+
+uniform float   time;
+uniform vec2    resolution;
+uniform vec3    color;
+
+void main() {
+
+    vec2 p = gl_FragCoord.xy / resolution * 10.0 -vec2(19.0);
+    vec2 i = p;
+    float c = 1.0;
+    float inten = .05;
+
+    for (int n = 0; n < 8; n++) 
+    {
+        float t = time * (0.7 - (0.2 / float(n+1)));
+        i = p + vec2(cos(t - i.x) + sin(t + i.y), sin(t - i.y) + cos(t + i.x));
+        c += 1.0 / length(vec2(p.x / (2.0 * sin(i.x + t) / inten), p.y / (cos(i.y + t) / inten)));
+    }
+
+    c /= float(8);
+    c = 1.5 - sqrt(pow(c, 2.0));
+    gl_FragColor = vec4(color * c * c * c * c, 1.0);
+
+}
